@@ -1,0 +1,20 @@
+# Grafana datasource configuration for Prometheus
+
+apiVersion: 1
+
+datasources:
+  - name: Prometheus
+    type: prometheus
+    access: proxy
+    url: http://prometheus:9090
+    isDefault: true
+    editable: true
+    jsonData:
+      httpMethod: POST
+      queryTimeout: 60s
+      timeInterval: 15s
+    secureJsonData: {}
+
+# TODO: Add authentication if needed
+# TODO: Add additional datasources
+# TODO: Add datasource health checks

@@ -1,0 +1,16 @@
+# Grafana dashboard provisioning configuration
+
+apiVersion: 1
+
+providers:
+  - name: 'BillFusion Auth Service'
+    type: file
+    disableDeletion: false
+    updateIntervalSeconds: 10
+    allowUiUpdates: true
+    options:
+      path: /var/lib/grafana/dashboards
+
+# TODO: Add folder organization
+# TODO: Add dashboard permissions
+# TODO: Add dashboard versioning
