@@ -258,3 +258,18 @@ git push origin main
 **🎉 Your auth service is now production-ready on Render!**
 
 **Service URL:** `https://billfusion-auth-service.onrender.com`
+
+---
+
+## ⚠️ **Important Note About Redis**
+
+Render's free tier doesn't include Redis in blueprints. You have two options:
+
+### **Option 1: Use Railway Instead (Recommended)**
+Railway includes Redis in the free tier! See `RAILWAY_DEPLOYMENT.md` for details.
+
+### **Option 2: Use External Redis**
+- **Upstash** (free tier: 10,000 commands/day) - https://upstash.com
+- **Redis Cloud** (free tier: 30MB) - https://redis.com/try-free
+
+Then set `REDIS_URL` manually in Render environment variables.

@@ -187,12 +187,15 @@ async def lifespan(app: FastAPI):
     await verify_database_connectivity()
     logger.info("Database initialized successfully")
     
-    # Initialize Redis connection pool
+    # Initialize Redis connection pool (optional)
     try:
-        redis_client = redis.from_url(settings.REDIS_URL)
-        await redis_client.ping()
-        await redis_client.close()
-        logger.info("Redis connection verified")
+        if hasattr(settings, 'REDIS_URL') and settings.REDIS_URL:
+            redis_client = redis.from_url(settings.REDIS_URL)
+            await redis_client.ping()
+            await redis_client.close()
+            logger.info("Redis connection verified")
+        else:
+            logger.info("Redis not configured, caching disabled")
     except Exception as e:
         logger.warning("Redis connection failed, caching disabled", error=str(e))
     
