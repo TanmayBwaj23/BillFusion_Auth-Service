@@ -8,45 +8,8 @@ from sqlalchemy.dialects.postgresql import UUID
 from datetime import datetime, timezone
 from typing import Optional
 import uuid
-import enum
 
 from app.core.database import Base
-
-
-# Stub enums for backward compatibility (not used in simplified model)
-class UserRole(str, enum.Enum):
-    """Stub for backward compatibility"""
-    CLIENT = "client"
-    VENDOR = "vendor"
-    EMPLOYEE = "employee"
-    ADMIN = "admin"
-
-
-class UserStatus(str, enum.Enum):
-    """Stub for backward compatibility"""
-    PENDING = "pending"
-    ACTIVE = "active"
-    SUSPENDED = "suspended"
-    DEACTIVATED = "deactivated"
-
-
-class AuthProvider(str, enum.Enum):
-    """Stub for backward compatibility"""
-    LOCAL = "local"
-    GOOGLE = "google"
-
-
-# Stub classes for backward compatibility
-class UserSession(Base):
-    """Stub for backward compatibility"""
-    __tablename__ = "user_sessions_stub"
-    id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-
-
-class UserAuditLog(Base):
-    """Stub for backward compatibility"""
-    __tablename__ = "user_audit_logs_stub"
-    id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
 
 
 class User(Base):
@@ -71,7 +34,6 @@ class User(Base):
         nullable=False,
         comment="User email address (unique)"
     )
-
     
     name: Mapped[str] = mapped_column(
         String(255),
@@ -85,13 +47,6 @@ class User(Base):
         comment="User phone number"
     )
     
-    role: Mapped[str] = mapped_column(
-        String(50),
-        default="employee",
-        nullable=False,
-        comment="User role (client, vendor, employee)"
-    )
-
     # Authentication
     password: Mapped[Optional[str]] = mapped_column(
         String(255),
@@ -106,8 +61,24 @@ class User(Base):
         comment="Whether user signed up via social login"
     )
     
+    # Timestamps
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        default=lambda: datetime.now(timezone.utc),
+        nullable=False,
+        comment="Account creation timestamp"
+    )
+    
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        default=lambda: datetime.now(timezone.utc),
+        onupdate=lambda: datetime.now(timezone.utc),
+        nullable=False,
+        comment="Last update timestamp"
+    )
+    
     def __repr__(self) -> str:
-        return f"<User(id={self.id}, email={self.email}, name={self.name}, role={self.role})>"
+        return f"<User(id={self.id}, email={self.email}, name={self.name})>"
     
     def to_dict(self):
         """Convert user to dictionary"""
@@ -116,7 +87,6 @@ class User(Base):
             "email": self.email,
             "name": self.name,
             "phone": self.phone,
-            "role": self.role,
             "is_social_login": self.is_social_login,
             "created_at": self.created_at.isoformat() if self.created_at else None,
             "updated_at": self.updated_at.isoformat() if self.updated_at else None

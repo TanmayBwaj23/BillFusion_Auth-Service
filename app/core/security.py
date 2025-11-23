@@ -30,7 +30,7 @@ from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from sqlalchemy.ext.asyncio import AsyncSession
 import structlog
 
-from app.models.user import User, UserRole, UserStatus
+from app.models.user import User
 from app.services.auth_service import AuthService
 from app.core.database import get_db_session
 from app.utils.rate_limiting import RateLimiter

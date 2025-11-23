@@ -70,7 +70,7 @@ services:
     environment:
       # Application Settings
       ENVIRONMENT: ${ENVIRONMENT:-development}
-      DEBUG: ${DEBUG:-false}
+      DEBUG: ${DEBUG:-true}
       HOST: 0.0.0.0
       PORT: 8000
       
@@ -117,6 +117,7 @@ services:
     volumes:
       - ./logs:/app/logs
       - ./uploads:/app/uploads
+      - ./app:/app/app
     ports:
       - "8000:8000"
     networks:

@@ -8,7 +8,9 @@ import structlog
 from typing import Optional, Dict, Any
 from datetime import datetime, timezone
 
-from app.api.v1.endpoints import auth, users, admin
+from app.api.v1.endpoints import auth
+# Temporarily disabled for simplified version
+# from app.api.v1.endpoints import users, admin
 from app.core.config import settings
 from app.middleware.rate_limiting import RateLimitMiddleware
 from app.utils.security import SecurityUtils
@@ -60,39 +62,40 @@ api_router.include_router(
     include_in_schema=True
 )
 
-# Include user management endpoints with enhanced configuration  
-api_router.include_router(
-    users.router,
-    prefix="/users",
-    tags=["User Management"],
-    responses={
-        400: {"description": "Bad Request - Invalid user data"},
-        401: {"description": "Unauthorized - Authentication required"},
-        403: {"description": "Forbidden - Insufficient permissions"},
-        404: {"description": "Not Found - User not found"},
-        422: {"description": "Validation Error - User data validation failed"},
-        429: {"description": "Too Many Requests - Rate limit exceeded"}
-    },
-    dependencies=[Depends(security)],  # User endpoints require authentication
-    include_in_schema=True
-)
+# Temporarily disabled for simplified version
+# # Include user management endpoints with enhanced configuration  
+# api_router.include_router(
+#     users.router,
+#     prefix="/users",
+#     tags=["User Management"],
+#     responses={
+#         400: {"description": "Bad Request - Invalid user data"},
+#         401: {"description": "Unauthorized - Authentication required"},
+#         403: {"description": "Forbidden - Insufficient permissions"},
+#         404: {"description": "Not Found - User not found"},
+#         422: {"description": "Validation Error - User data validation failed"},
+#         429: {"description": "Too Many Requests - Rate limit exceeded"}
+#     },
+#     dependencies=[Depends(security)],  # User endpoints require authentication
+#     include_in_schema=True
+# )
 
-# Include admin endpoints with enhanced configuration
-api_router.include_router(
-    admin.router,
-    prefix="/admin",
-    tags=["Administration"],
-    responses={
-        400: {"description": "Bad Request - Invalid admin operation"},
-        401: {"description": "Unauthorized - Authentication required"},
-        403: {"description": "Forbidden - Admin privileges required"},
-        404: {"description": "Not Found - Resource not found"},
-        422: {"description": "Validation Error - Input validation failed"},
-        429: {"description": "Too Many Requests - Rate limit exceeded"}
-    },
-    dependencies=[Depends(security)],  # Admin endpoints require authentication
-    include_in_schema=True
-)
+# # Include admin endpoints with enhanced configuration
+# api_router.include_router(
+#     admin.router,
+#     prefix="/admin",
+#     tags=["Administration"],
+#     responses={
+#         400: {"description": "Bad Request - Invalid admin operation"},
+#         401: {"description": "Unauthorized - Authentication required"},
+#         403: {"description": "Forbidden - Admin privileges required"},
+#         404: {"description": "Not Found - Resource not found"},
+#         422: {"description": "Validation Error - Input validation failed"},
+#         429: {"description": "Too Many Requests - Rate limit exceeded"}
+#     },
+#     dependencies=[Depends(security)],  # Admin endpoints require authentication
+#     include_in_schema=True
+# )
 
 # Health check endpoints
 @api_router.get(
